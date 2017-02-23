@@ -8,7 +8,7 @@ var objectId = require('mongodb').ObjectID;
 var assert = require('assert');
 
 
-var url = process.env.MONGODB_URI || 'mongodb://localhost:27017/data';
+var url = process.env.MONGODB_URI || 'mongodb://localhost:27017/how-old';
 
 // middleware
 app.use(morgan('dev'));
@@ -19,15 +19,6 @@ app.use(bodyParser.json());
 // GET '/' => '/public/index.html'
 app.use(express.static(__dirname + '/public'));
 
-// function calcAge(person) {
-//   var birthMonth = person.birthDate.getMonth() + 1;
-//   var birthYear = person.birthDate.getFullYear();
-//   if (todaysMonth >= birthMonth && todaysDate >= person.birthDate.getDate()){
-//     var age = todaysYear - birthYear;
-//   } else {
-//     var age = todaysYear - birthYear - 1;
-//   }
-// };
 
 var today = new Date()
 var todaysDate = today.getDate()
@@ -39,7 +30,7 @@ app.post('/insert', function(req, res) {
     person: req.body.person,
     birthdate: req.body.birthdate,
   }
-  console.log(data) //{ person: 'John', birthdate: '1947-06-15' }
+  //console.log(data) { person: 'John', birthdate: '1947-06-15' }
   var person = data.person
   var birthDate = data.birthdate.split('-')
   var birthMonth = birthDate[1];
@@ -53,7 +44,7 @@ app.post('/insert', function(req, res) {
 
   mongo.connect(url, function(err, db) {
     assert.equal(null, err);
-    db.collection('data').insertOne(data, function(err, result) {
+    db.collection('people').insertOne(data, function(err, result) {
       assert.equal(null, err);
       console.log('Item inserted');
       db.close();
@@ -66,7 +57,7 @@ app.get('/data', function(req, res, next) {
   var resultArray = [];
   mongo.connect(url, function(err, db) {
     assert.equal(null, err);
-    var dataFromDB = db.collection('data').find({})
+    var dataFromDB = db.collection('people').find({})
     dataFromDB.forEach(function(doc){
       resultArray.push(doc);
       console.log(resultArray)
@@ -81,11 +72,15 @@ app.get('/data', function(req, res, next) {
 app.post('/people/:id/delete', function(req, res) {
   var id = req.params.id;
   mongo.connect(url, function(err, db) {
-    db.collection('data').deleteOne({_id: objectId(id)}, function(err, result) {
+    db.collection('people').deleteOne({_id: objectId(id)}, function(err, result) {
       db.close();
       res.json(result);
     })
   })
+})
+
+app.post('/', function(req, res) {
+  res.redirect('/');
 })
 
 
