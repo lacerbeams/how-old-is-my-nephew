@@ -1,0 +1,27 @@
+{
+  "name": "how-old-is-my-nephew",
+  "version": "1.0.0",
+  "description": "I'm notoriously bad at remembering all the birthdays and ages of  my rather large family. I created this app to keep track of that  information. The numbers update on each person's birthday.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lacerbeams/how-old-is-my-nephew.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lacerbeams/how-old-is-my-nephew/issues"
+  },
+  "homepage": "https://github.com/lacerbeams/how-old-is-my-nephew#readme",
+  "dependencies": {
+    "body-parser": "^1.16.1",
+    "express": "^4.14.1",
+    "express-handlebars": "^3.0.0",
+    "mongodb": "^2.2.24",
+    "morgan": "^1.8.1"
+  }
+}
