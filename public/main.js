@@ -1,14 +1,40 @@
 console.log('hello from main.js');
 var $submit = $('.submit');
-
+var today = new Date()
+var todaysDate = today.getDate()
+var todaysMonth = today.getMonth() + 1
+var todaysYear = today.getFullYear()
 
 function renderTable() {
   $('input').val('');
   $.get('/data', function(items) {
-    var chunkOfHtml = $('#people-template').html();
-    var template = Handlebars.compile(chunkOfHtml);
-    var html = template({items: items});
-    $('.details').append(html);
+    console.log(items)
+    // var chunkOfHtml = $('#people-template').html();
+    // var template = Handlebars.compile(chunkOfHtml);
+    // var html = template({items: items});
+    for (var i = 0; i < items.length; i++){
+      var person = items[i].person
+      var birthDate = items[i].birthdate.split('-');
+      var birthDateDisplay = birthDate.join('-');
+      var birthMonth = birthDate[1];
+      var birthYear = birthDate[0];
+      if (todaysMonth >= birthMonth && todaysDate >= birthDate[2]){
+        var age = todaysYear - birthYear;
+      } else {
+        var age = todaysYear - birthYear - 1;
+      }
+      html = `
+      <tr>
+        <td class="person"> ${person} </td>
+        <td class="birthdate"> ${birthDateDisplay} </td>
+        <td class="age"> ${age} </td>
+        <td>
+          <button id="${items[i]._id}" class="delete">Delete</button>
+        </td>
+      </tr>
+      `
+      $('.details').append(html);
+    }
     $('.delete').click(function() {
       var button = $(this);
       var id = button.attr('id');
