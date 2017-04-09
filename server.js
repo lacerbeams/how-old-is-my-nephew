@@ -30,17 +30,6 @@ app.post('/insert', function(req, res) {
     person: req.body.person,
     birthdate: req.body.birthdate,
   }
-  //console.log(data) { person: 'John', birthdate: '1947-06-15' }
-  var person = data.person
-  var birthDate = data.birthdate.split('-')
-  var birthMonth = birthDate[1];
-  var birthYear = birthDate[0];
-  if (todaysMonth >= birthMonth && todaysDate >= birthDate[2]){
-    var age = todaysYear - birthYear;
-  } else {
-    var age = todaysYear - birthYear - 1;
-  }
-  // data.age = age;
 
   mongo.connect(url, function(err, db) {
     assert.equal(null, err);

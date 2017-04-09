@@ -18,9 +18,11 @@ function renderTable() {
       var birthDateDisplay = birthDate.join('-');
       var birthMonth = birthDate[1];
       var birthYear = birthDate[0];
-      if (todaysMonth >= birthMonth && todaysDate >= birthDate[2]){
-        var age = todaysYear - birthYear;
-      } else {
+      if(todaysMonth === birthMonth && todaysDate >= birthDate[2]) {
+          var age = todaysYear - birthYear;
+        } else if (todaysMonth > birthMonth) {
+          var age = todaysYear - birthYear;
+        } else {
         var age = todaysYear - birthYear - 1;
       }
       html = `
@@ -34,7 +36,6 @@ function renderTable() {
       </tr>
       `
       $('.details').append(html);
-    }
     $('.delete').click(function() {
       var button = $(this);
       var id = button.attr('id');
@@ -43,6 +44,7 @@ function renderTable() {
         tr.remove();
       })
     })
+    }
   })
 }
 
