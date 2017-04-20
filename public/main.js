@@ -16,9 +16,9 @@ function renderTable() {
       var person = items[i].person
       var birthDate = items[i].birthdate.split('-');
       var birthDateDisplay = birthDate.join('-');
-      var birthMonth = birthDate[1];
+      var birthMonth = parseInt(birthDate[1]);
       var birthYear = birthDate[0];
-      if(todaysMonth === birthMonth && todaysDate >= birthDate[2]) {
+      if(todaysMonth === birthMonth && todaysDate >= parseInt(birthDate[2])) {
           var age = todaysYear - birthYear;
         } else if (todaysMonth > birthMonth) {
           var age = todaysYear - birthYear;
