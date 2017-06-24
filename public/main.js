@@ -5,6 +5,12 @@ var todaysDate = today.getDate()
 var todaysMonth = today.getMonth() + 1
 var todaysYear = today.getFullYear()
 
+function login() {
+  $.get('/auth/login', function(data) {
+    console.log(data);
+  }
+}
+
 function renderTable() {
   $('input').val('');
   $.get('/data', function(items) {
@@ -57,6 +63,8 @@ $submit.click(function() {
   location.reload();
   }
 });
+
+$('#login').click(login);
 
 
 $(document).ready(renderTable);
