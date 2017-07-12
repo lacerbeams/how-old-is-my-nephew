@@ -1,104 +1,79 @@
-require('dotenv').config()
-const express = require('express')
-const favicon = require('serve-favicon')
-const bodyParser = require('body-parser')
-const session = require('express-session')
-const hbs = require('express-handlebars')
-const morgan = require('morgan')
-const path = require('path')
-const app = express()
-const mongo = require('mongodb').MongoClient;
-const objectId = require('mongodb').ObjectID;
-const assert = require('assert');
-const User = require('./models/user.js')
+var express = require('express');
+var bodyParser = require('body-parser');
+var morgan = require('morgan');
+var app = express();
+var hbs = require('express-handlebars');
+var mongo = require('mongodb').MongoClient;
+var objectId = require('mongodb').ObjectID;
+var assert = require('assert');
 
-// CONFIG
-require('./db/config')
-app.use(morgan('dev'))
-app.use(express.static(path.join(__dirname, 'public')))
-// app.use(favicon(path.join(__dirname, 'public/favicon.ico')))
-app.use(bodyParser.urlencoded({extended: true}))
+
+var url = process.env.MONGODB_URI || 'mongodb://localhost:27017/how-old';
+
+// middleware
+app.use(morgan('dev'));
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
-app.use(session({secret: 'keyboard cat', resave: false, saveUninitialized: true}))
-app.engine('hbs', hbs({extname: 'hbs', defaultLayout: 'main', layoutsDir: path.join(__dirname, 'views/layouts/')}))
-app.set('view engine', 'hbs')
 
-// ROUTES
-app.use('/auth', require('./routes/auth'))
-app.use(require('./routes/error'))
+// Static Routes
+// GET '/' => '/public/index.html'
+app.use(express.static(__dirname + '/public'));
 
 
-const url = process.env.MONGODB_URI || 'mongodb://localhost:27017/how-old';
+var today = new Date()
+var todaysDate = today.getDate()
+var todaysMonth = today.getMonth() + 1
+var todaysYear = today.getFullYear()
 
-
-const today = new Date()
-const todaysDate = today.getDate()
-const todaysMonth = today.getMonth() + 1
-const todaysYear = today.getFullYear()
-
-
-//creates user
-app.post('/', function(req, res, next){
-  function makeUser (obj) {
-    obj.search = {
-      user: {
-        name: obj.user.name,
-        fb_id: {},
-        family_members: []
-      }
-    }
+app.post('/insert', function(req, res) {
+  var data = {
+    person: req.body.person,
+    birthdate: req.body.birthdate,
   }
-});
 
-//saves family data
-app.post('/save', function(req, res) {
-  var fb_name = new User( {
-    name: req.session.user.name,
-    fb_id: req.session.user.id
+  mongo.connect(url, function(err, db) {
+    assert.equal(null, err);
+    db.collection('people').insertOne(data, function(err, result) {
+      assert.equal(null, err);
+      console.log('Item inserted');
+      db.close();
+    });
   });
-  let obj = {};
-  obj = {
-    name: req.body.person,
-    date: req.body.birthdate,
-  }
-  fb_name.family_members.push(obj);
-  fb_name.save();
-  res.json('saved to req.session.family!')
+  res.redirect('/');
 })
 
-//old way of doing this
-// app.post('/insert', function(req, res) {
-//   var data = {
-//     person: req.body.person,
-//     birthdate: req.body.birthdate,
-//   }
-
-//   mongo.connect(url, function(err, db) {
-//     assert.equal(null, err);
-//     db.collection('people').insertOne(data, function(err, result) {
-//       assert.equal(null, err);
-//       console.log('Item inserted');
-//       db.close();
-//     });
-//   });
-//   res.redirect('/');
-// })
-
-//gets family data
-app.get('/', (req, res, next) => {
-  const user = req.session.user;
-  if (!user) return res.redirect('/');
-
+app.get('/data', function(req, res, next) {
   var resultArray = [];
-  User.find({fb_id: user.id})
-      .then( (users) => {
-        resultArray = users[0].family;
-      })
-      res.json(resultArray)
+  mongo.connect(url, function(err, db) {
+    assert.equal(null, err);
+    var dataFromDB = db.collection('people').find({})
+    dataFromDB.forEach(function(doc){
+      resultArray.push(doc);
+      console.log(resultArray)
+    },
+    function () {
+      db.close();
+      res.json(resultArray);
+    });
+  });
 });
 
-//old way of doing this
-// app.get('/data', function(req, res, next) {
+app.post('/people/:id/delete', function(req, res) {
+  var id = req.params.id;
+  mongo.connect(url, function(err, db) {
+    db.collection('people').deleteOne({_id: objectId(id)}, function(err, result) {
+      db.close();
+      res.json(result);
+    })
+  })
+})
+
+app.post('/', function(req, res) {
+  res.redirect('/');
+})
+
+// app.post('/update', function(req, res) {
+//   // res.redirect('/');
 //   var resultArray = [];
 //   mongo.connect(url, function(err, db) {
 //     assert.equal(null, err);
@@ -106,32 +81,27 @@ app.get('/', (req, res, next) => {
 //     dataFromDB.forEach(function(doc){
 //       resultArray.push(doc);
 //       console.log(resultArray)
-//     },
-//     function () {
+//     })
+//     resultArray.forEach(function(data) {
+//       var person = data.person
+//       var birthDate = data.birthdate.split('-')
+//       var birthMonth = birthDate[1];
+//       var birthYear = birthDate[0];
+//       if (todaysMonth >= birthMonth && todaysDate >= birthDate[2]){
+//       var age = todaysYear - birthYear;
+//       } else {
+//       var age = todaysYear - birthYear - 1;
+//       }
+//       db.collection('people').findOneAndUpdate({person: person}, {$set: {age: age}}, {upsert: true}, function(err,doc) {
+//        if (err) { throw err; }
+//        else { console.log("Updated"); }
+//      });
+//     })
+//     console.log(resultArray)
 //       db.close();
 //       res.json(resultArray);
-//     });
 //   });
-// });
-
-
-
-// app.post('/people/:id/delete', function(req, res) {
-//   var id = req.params.id;
-//   mongo.connect(url, function(err, db) {
-//     db.collection('people').deleteOne({_id: objectId(id)}, function(err, result) {
-//       db.close();
-//       res.json(result);
-//     })
-//   })
 // })
-
-// app.post('/', function(req, res) {
-//   res.redirect('/');
-// })
-
-
-
 
 
 var port = process.env.PORT || 3000;

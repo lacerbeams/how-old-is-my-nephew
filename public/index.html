@@ -20,27 +20,41 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 </head>
 <body>
-  <script>
-    window.fbAsyncInit = function() {
-      FB.init({
-        appId      : '908023746006330',
-        xfbml      : true,
-        version    : 'v2.9'
-      });
-      FB.AppEvents.logPageView();
-    };
-
-    (function(d, s, id){
-       var js, fjs = d.getElementsByTagName(s)[0];
-       if (d.getElementById(id)) {return;}
-       js = d.createElement(s); js.id = id;
-       js.src = "//connect.facebook.net/en_US/sdk.js";
-       fjs.parentNode.insertBefore(js, fjs);
-     }(document, 'script', 'facebook-jssdk'));
-  </script>
-
-  <div class="fb-login-button" data-max-rows="1" data-size="large" data-button-type="continue_with" data-show-faces="false" data-auto-logout-link="false" data-use-continue-as="false"></div>
-
-  <script src="main.js"></script>
+<div class="container">
+  <div class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-2 col-xs-8 col-xs-offset-2">
+    <img src="family.png" class="family">
+    <h1>How old is my nephew?</h1>
+    <h4>Add a Person. Their age will update as they get older.</h4>
+    <div class="inputs">
+      <form method="post" id="form">
+        Person: <input type="text" name="person">
+        Birthdate: <input type="date" name="birthdate">
+      <button class="submit">Submit</button>
+      </form>
+    </div>
+   <div id="people">
+      <table class="details table">
+        <tr>
+          <th>Person</th>
+<!--           <th>Birthdate</th> -->
+          <th>Age</th>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+<!-- <script type="text/handlebars" id="people-template">
+  {{#each items}}
+  <tr>
+    <td class="person"> {{person}} </td>
+    <td class="birthdate"> {{birthdate}} </td>
+    <td class="age"> {{age}} </td>
+    <td>
+      <button id="{{_id}}" class="delete">Delete</button>
+    </td>
+  </tr>
+  {{/each}}
+</script> -->
+<script src="main.js"></script>
 </body>
 </html>

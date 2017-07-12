@@ -5,12 +5,6 @@ var todaysDate = today.getDate()
 var todaysMonth = today.getMonth() + 1
 var todaysYear = today.getFullYear()
 
-function login() {
-  $.get('/auth/login', function(data) {
-    console.log(data);
-  }
-}
-
 function renderTable() {
   $('input').val('');
   $.get('/data', function(items) {
@@ -34,7 +28,6 @@ function renderTable() {
       html = `
       <tr>
         <td class="person"> ${person} </td>
-        <td class="birthdate"> ${birthDateDisplay} </td>
         <td class="age"> ${age} </td>
         <td>
           <button id="${items[i]._id}" class="delete">Delete</button>
@@ -64,8 +57,7 @@ $submit.click(function() {
   }
 });
 
-$('#login').click(login);
-
 
 $(document).ready(renderTable);
 
+        // <td class="birthdate"> ${birthDateDisplay} </td>
