@@ -58,6 +58,7 @@ $submit.click(function() {
 });
 
 
-$(document).ready(renderTable);
+
+// $(document).ready(renderTable);
 
         // <td class="birthdate"> ${birthDateDisplay} </td>
