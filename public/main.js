@@ -52,8 +52,11 @@ $submit.click(function() {
   if (!$('input').val()) {
     return false
   } else {
-  $.post('/insert', $('#form').serialize());
-  location.reload();
+    var data = $('#form').serialize();
+    data.id = $('#status').attr('class');
+    console.log(data);
+    $.post('/insert', data);
+    location.reload();
   }
 });
 

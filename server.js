@@ -26,16 +26,18 @@ var todaysMonth = today.getMonth() + 1
 var todaysYear = today.getFullYear()
 
 app.post('/insert', function(req, res) {
+  console.log(req.body);
   var data = {
     person: req.body.person,
     birthdate: req.body.birthdate,
+    // add userID
   }
-
+  console.log(data.user);
   mongo.connect(url, function(err, db) {
     assert.equal(null, err);
     db.collection('people').insertOne(data, function(err, result) {
       assert.equal(null, err);
-      console.log('Item inserted');
+      console.log(data, 'Item inserted');
       db.close();
     });
   });
@@ -71,37 +73,6 @@ app.post('/people/:id/delete', function(req, res) {
 app.post('/', function(req, res) {
   res.redirect('/');
 })
-
-// app.post('/update', function(req, res) {
-//   // res.redirect('/');
-//   var resultArray = [];
-//   mongo.connect(url, function(err, db) {
-//     assert.equal(null, err);
-//     var dataFromDB = db.collection('people').find({})
-//     dataFromDB.forEach(function(doc){
-//       resultArray.push(doc);
-//       console.log(resultArray)
-//     })
-//     resultArray.forEach(function(data) {
-//       var person = data.person
-//       var birthDate = data.birthdate.split('-')
-//       var birthMonth = birthDate[1];
-//       var birthYear = birthDate[0];
-//       if (todaysMonth >= birthMonth && todaysDate >= birthDate[2]){
-//       var age = todaysYear - birthYear;
-//       } else {
-//       var age = todaysYear - birthYear - 1;
-//       }
-//       db.collection('people').findOneAndUpdate({person: person}, {$set: {age: age}}, {upsert: true}, function(err,doc) {
-//        if (err) { throw err; }
-//        else { console.log("Updated"); }
-//      });
-//     })
-//     console.log(resultArray)
-//       db.close();
-//       res.json(resultArray);
-//   });
-// })
 
 
 var port = process.env.PORT || 3000;
