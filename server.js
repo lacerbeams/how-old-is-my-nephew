@@ -30,28 +30,29 @@ app.post('/insert', function(req, res) {
   var data = {
     person: req.body.person,
     birthdate: req.body.birthdate,
-    // add userID
+    userID: req.body.userID,
   }
-  console.log(data.user);
   mongo.connect(url, function(err, db) {
     assert.equal(null, err);
     db.collection('people').insertOne(data, function(err, result) {
       assert.equal(null, err);
-      console.log(data, 'Item inserted');
+      // console.log(data, 'Item inserted');
       db.close();
     });
   });
   res.redirect('/');
 })
 
-app.get('/data', function(req, res, next) {
+app.get('/data/:id', function(req, res, next) {
   var resultArray = [];
   mongo.connect(url, function(err, db) {
     assert.equal(null, err);
-    var dataFromDB = db.collection('people').find({})
+    var userID = req.params.id;
+    console.log(userID);
+    var dataFromDB = db.collection('people').find({userID})
     dataFromDB.forEach(function(doc){
       resultArray.push(doc);
-      console.log(resultArray)
+      // console.log(resultArray)
     },
     function () {
       db.close();
