@@ -25,13 +25,13 @@ var todaysDate = today.getDate()
 var todaysMonth = today.getMonth() + 1
 var todaysYear = today.getFullYear()
 
-app.post('/insert', function(req, res) {
-  console.log(req.body);
+app.post('/insert/:name', function(req, res) {
   var data = {
-    person: req.body.person,
+    person: req.params.name,
     birthdate: req.body.birthdate,
     userID: req.body.userID,
   }
+  console.log(data);
   mongo.connect(url, function(err, db) {
     assert.equal(null, err);
     db.collection('people').insertOne(data, function(err, result) {
@@ -52,7 +52,7 @@ app.get('/data/:id', function(req, res, next) {
     var dataFromDB = db.collection('people').find({userID})
     dataFromDB.forEach(function(doc){
       resultArray.push(doc);
-      // console.log(resultArray)
+      console.log(resultArray)
     },
     function () {
       db.close();
