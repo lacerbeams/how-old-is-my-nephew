@@ -74,6 +74,5 @@ $submit.click(function() {
 });
 
 
-renderTable();
-$(document).ready(renderTable);
+$(document).ready(console.log('ready'), renderTable);
 
