@@ -57,6 +57,7 @@
     FB.getLoginStatus(function(response) {
       statusChangeCallback(response);
     });
+    renderTable();
   }
 
   window.fbAsyncInit = function() {
@@ -83,7 +84,10 @@
   FB.getLoginStatus(function(response) {
     statusChangeCallback(response);
     document.querySelector('#status').className = response.authResponse.userID;
-
+    document.querySelector('#logout').className = response.authResponse.accessToken;
+    $('#logout').click(function(){
+      window.location.href='https://www.facebook.com/logout.php?next='+'http://localhost:3000/logout'+'&access_token='+document.querySelector('#logout').className;
+    })
   });
 
   };
@@ -161,6 +165,8 @@
       renderTable();
     });
   }
+
+
 </script>
 
 <!--
@@ -171,6 +177,7 @@
 
 <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
 </fb:login-button>
+<button id="logout">Log Out</button>
 
 <div id="status">
 </div>

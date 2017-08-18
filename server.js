@@ -43,6 +43,10 @@ app.post('/insert/:name', function(req, res) {
   res.redirect('/');
 })
 
+app.get('/logout', function(req, res) {
+  res.redirect('/');
+})
+
 app.get('/data/:id', function(req, res, next) {
   var resultArray = [];
   mongo.connect(url, function(err, db) {
