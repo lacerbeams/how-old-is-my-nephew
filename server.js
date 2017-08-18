@@ -44,7 +44,7 @@ app.post('/insert/:name', function(req, res) {
 })
 
 app.get('/logout', function(req, res) {
-  res.redirect('/');
+  res.redirect('http://how-old.herokuapp.com');
 })
 
 app.get('/data/:id', function(req, res, next) {
