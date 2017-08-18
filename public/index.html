@@ -45,7 +45,7 @@
       document.querySelector('#status').className = response.authResponse.userID;
       document.querySelector('#logout').className = response.authResponse.accessToken;
       $('#logout').click(function(){
-        window.location.href='https://www.facebook.com/logout.php?next='+'http://localhost:3000/logout'+'&access_token='+document.querySelector('#logout').className;
+        window.location.href='https://www.facebook.com/logout.php?next='+'http://how-old.herokuapp.com/logout'+'&access_token='+document.querySelector('#logout').className;
       });
       $('#log').addClass('log col-lg-2 col-lg-offset-5');
       testAPI();
