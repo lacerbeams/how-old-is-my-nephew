@@ -74,5 +74,3 @@ $submit.click(function() {
 });
 
 
-$(document).ready(console.log('ready'), renderTable);
-

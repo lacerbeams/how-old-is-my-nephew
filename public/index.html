@@ -42,6 +42,11 @@
     // for FB.getLoginStatus().
     if (response.status === 'connected') {
       // Logged into your app and Facebook.
+      document.querySelector('#status').className = response.authResponse.userID;
+      document.querySelector('#logout').className = response.authResponse.accessToken;
+      $('#logout').click(function(){
+        window.location.href='https://www.facebook.com/logout.php?next='+'http://localhost:3000/logout'+'&access_token='+document.querySelector('#logout').className;
+      });
       testAPI();
     } else {
       // The person is not logged into your app or we are unable to tell.
@@ -57,7 +62,6 @@
     FB.getLoginStatus(function(response) {
       statusChangeCallback(response);
     });
-    renderTable();
   }
 
   window.fbAsyncInit = function() {
@@ -83,11 +87,6 @@
 
   FB.getLoginStatus(function(response) {
     statusChangeCallback(response);
-    document.querySelector('#status').className = response.authResponse.userID;
-    document.querySelector('#logout').className = response.authResponse.accessToken;
-    $('#logout').click(function(){
-      window.location.href='https://www.facebook.com/logout.php?next='+'http://localhost:3000/logout'+'&access_token='+document.querySelector('#logout').className;
-    })
   });
 
   };
