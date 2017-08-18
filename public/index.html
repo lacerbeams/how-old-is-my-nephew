@@ -47,6 +47,7 @@
       $('#logout').click(function(){
         window.location.href='https://www.facebook.com/logout.php?next='+'http://localhost:3000/logout'+'&access_token='+document.querySelector('#logout').className;
       });
+      $('#log').addClass('log col-lg-2 col-lg-offset-5');
       testAPI();
     } else {
       // The person is not logged into your app or we are unable to tell.
@@ -161,10 +162,10 @@
       console.log('Successful login for: ' + response.name);
       document.getElementById('status').innerHTML =
         'Thanks for logging in, ' + response.name + '!';
+      $('#log').removeClass();
       renderTable();
     });
   }
-
 
 </script>
 
@@ -173,12 +174,13 @@
   the JavaScript SDK to present a graphical Login button that triggers
   the FB.login() function when clicked.
 -->
+<div id="log" class="log col-lg-2 col-lg-offset-5">
+  <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
+  </fb:login-button>
+  <button id="logout">Log Out</button>
 
-<fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
-</fb:login-button>
-<button id="logout">Log Out</button>
-
-<div id="status">
+  <div id="status">
+  </div>
 </div>
 
 <div class="container">

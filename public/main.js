@@ -17,6 +17,7 @@ function renderTable() {
     data: data,
     success: function(items) {
     console.log(items)
+    $('.container').show();
     for (var i = 0; i < items.length; i++){
       var person = items[i].person
       var birthDate = items[i].birthdate.split('-');
@@ -73,4 +74,6 @@ $submit.click(function() {
   }
 });
 
-
+$(document).ready(function() {
+  $('.container').hide();
+})
