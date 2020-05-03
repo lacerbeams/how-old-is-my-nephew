@@ -19,6 +19,15 @@ app.use(bodyParser.json());
 // GET '/' => '/public/index.html'
 app.use(express.static(__dirname + '/public'));
 
+if(process.env.NODE_ENV === 'production') {
+  app.use((req, res, next) => {
+    if (req.header('x-forwarded-proto') !== 'https')
+      res.redirect(`https://${req.header('host')}${req.url}`)
+    else
+      next()
+  })
+}
+
 
 var today = new Date()
 var todaysDate = today.getDate()
