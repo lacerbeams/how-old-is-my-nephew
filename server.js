@@ -19,6 +19,18 @@ app.use(bodyParser.json());
 // GET '/' => '/public/index.html'
 app.use(express.static(__dirname + '/public'));
 
+app.use(function (req, res, next) {
+  var sslUrl;
+
+  if (process.env.NODE_ENV === 'production' &&
+    req.headers['x-forwarded-proto'] !== 'https') {
+
+    sslUrl = ['https://how-old.herokuapp.com', req.url].join('');
+    return res.redirect(sslUrl);
+  }
+
+  return next();
+});
 
 var today = new Date()
 var todaysDate = today.getDate()
